@@ -7,7 +7,7 @@ import { useDataStore } from '../store/useDataStore'
 import { diffMinutes, median, formatDateTime } from '../utils/dateUtils'
 import { exportToCSV } from '../utils/exportUtils'
 import EmptyState from '../components/EmptyState'
-import type { ESILevel, Patient } from '../types'
+import type { ESILevel } from '../types'
 
 const ESI_THRESHOLDS: Partial<Record<ESILevel, number>> = {
   'ESI-2': 30,
