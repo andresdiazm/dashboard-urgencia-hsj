@@ -1,11 +1,12 @@
 import { NavLink } from 'react-router-dom'
-import { Upload, Clock, Stethoscope, X, ArrowRightLeft, BookOpen } from 'lucide-react'
+import { Upload, Clock, Stethoscope, X, ArrowRightLeft, BookOpen, FileText } from 'lucide-react'
 import { useDataStore } from '../../store/useDataStore'
 
 const NAV_ITEMS = [
   { to: '/carga', label: 'Carga de Datos', icon: Upload },
   { to: '/espera', label: 'Sala de Espera', icon: Clock },
   { to: '/atencion', label: 'En Atención', icon: Stethoscope },
+  { to: '/documentacion', label: 'Documentación', icon: FileText },
 ]
 
 interface Props {

@@ -5,6 +5,7 @@ import Header from './components/Layout/Header'
 import Carga from './pages/Carga'
 import Espera from './pages/Espera'
 import Atencion from './pages/Atencion'
+import Documentacion from './pages/Documentacion'
 
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -21,6 +22,7 @@ export default function App() {
               <Route path="/carga" element={<Carga />} />
               <Route path="/espera" element={<Espera />} />
               <Route path="/atencion" element={<Atencion />} />
+              <Route path="/documentacion" element={<Documentacion />} />
             </Routes>
           </main>
         </div>
