@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { Upload, Clock, Stethoscope, X } from 'lucide-react'
+import { Upload, Clock, Stethoscope, X, ArrowRightLeft } from 'lucide-react'
 import { useDataStore } from '../../store/useDataStore'
 
 const NAV_ITEMS = [
@@ -61,6 +61,19 @@ export default function Sidebar({ open, onClose }: Props) {
               <span>{label}</span>
             </NavLink>
           ))}
+
+          <div className="mx-3 my-2 border-t border-white/10" />
+
+          <a
+            href="https://andresdiazm.github.io/digera-urgencia/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClose}
+            className="flex items-center gap-3 px-4 py-3 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-colors"
+          >
+            <ArrowRightLeft className="w-4 h-4 flex-shrink-0" />
+            <span>Entrega de Turno</span>
+          </a>
         </nav>
 
         {patients.length > 0 && (
