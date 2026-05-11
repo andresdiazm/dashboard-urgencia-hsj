@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { Upload, Clock, Stethoscope, X, ArrowRightLeft } from 'lucide-react'
+import { Upload, Clock, Stethoscope, X, ArrowRightLeft, BookOpen } from 'lucide-react'
 import { useDataStore } from '../../store/useDataStore'
 
 const NAV_ITEMS = [
@@ -73,6 +73,17 @@ export default function Sidebar({ open, onClose }: Props) {
           >
             <ArrowRightLeft className="w-4 h-4 flex-shrink-0" />
             <span>Entrega de Turno</span>
+          </a>
+
+          <a
+            href="https://andresdiazm.github.io/coursera_test/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClose}
+            className="flex items-center gap-3 px-4 py-3 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-colors"
+          >
+            <BookOpen className="w-4 h-4 flex-shrink-0" />
+            <span>GPC abreviadas</span>
           </a>
         </nav>
 
