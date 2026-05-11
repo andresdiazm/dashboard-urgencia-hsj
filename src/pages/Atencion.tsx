@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Legend,
 } from 'recharts'
 import { AlertTriangle, Download } from 'lucide-react'
 import { useDataStore } from '../store/useDataStore'
@@ -18,6 +18,16 @@ const ESI_BADGE_COLORS: Record<ESILevel, string> = {
   'ESI-4': 'bg-green-500 text-white',
   'ESI-5': 'bg-blue-400 text-white',
 }
+
+const ESI_CHART_COLORS: Record<ESILevel, string> = {
+  'ESI-1': '#B91C1C',
+  'ESI-2': '#F97316',
+  'ESI-3': '#FACC15',
+  'ESI-4': '#22C55E',
+  'ESI-5': '#60A5FA',
+}
+
+const ESI_LEVELS: ESILevel[] = ['ESI-1', 'ESI-2', 'ESI-3', 'ESI-4', 'ESI-5']
 
 function badgeColor(esi: ESILevel) {
   return ESI_BADGE_COLORS[esi] ?? 'bg-gray-200'
@@ -89,11 +99,14 @@ export default function Atencion() {
   }, [enriched])
 
   const espGroups = useMemo(() => {
-    const groups: Record<string, { total: number; alert: number }> = {}
+    const groups: Record<string, { total: number; alert: number; byEsi: Partial<Record<ESILevel, number>> }> = {}
     enriched.forEach((p) => {
-      if (!groups[p.especialidad]) groups[p.especialidad] = { total: 0, alert: 0 }
+      if (!groups[p.especialidad]) groups[p.especialidad] = { total: 0, alert: 0, byEsi: {} }
       groups[p.especialidad].total++
-      if (p.alerta) groups[p.especialidad].alert++
+      if (p.alerta) {
+        groups[p.especialidad].alert++
+        groups[p.especialidad].byEsi[p.esi] = (groups[p.especialidad].byEsi[p.esi] ?? 0) + 1
+      }
     })
     return Object.entries(groups)
       .sort(([, a], [, b]) => b.total - a.total)
@@ -101,11 +114,16 @@ export default function Atencion() {
   }, [enriched])
 
   const espAlertData = useMemo(() => {
-    return espGroups.map(([name, { total, alert }]) => ({
+    return espGroups.map(([name, { total, alert, byEsi }]) => ({
       name: name.slice(0, 14),
       pct: pct(alert, total),
       alert,
       total,
+      'ESI-1': byEsi['ESI-1'] ?? 0,
+      'ESI-2': byEsi['ESI-2'] ?? 0,
+      'ESI-3': byEsi['ESI-3'] ?? 0,
+      'ESI-4': byEsi['ESI-4'] ?? 0,
+      'ESI-5': byEsi['ESI-5'] ?? 0,
     }))
   }, [espGroups])
 
@@ -158,34 +176,36 @@ export default function Atencion() {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Por ESI</p>
-          <div className="flex flex-wrap gap-2">
-            {esiGroups.map(([esi, cnt]) => (
-              <span key={esi} className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold ${badgeColor(esi as ESILevel)}`}>
-                {esi}: {cnt}
-              </span>
-            ))}
-          </div>
+          <ResponsiveContainer width="100%" height={130}>
+            <BarChart data={esiGroups.map(([name, value]) => ({ name, value }))} layout="vertical">
+              <XAxis type="number" tick={{ fontSize: 10 }} />
+              <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} width={50} />
+              <Tooltip formatter={(val) => [val, 'Pacientes']} />
+              <Bar dataKey="value" radius={[0, 4, 4, 0]}>
+                {esiGroups.map(([esi], i) => (
+                  <Cell key={i} fill={ESI_CHART_COLORS[esi as ESILevel] ?? '#39A8AD'} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
-            % con alerta (&gt;6h) por Especialidad
+            Alertas (&gt;6h) por Especialidad
           </p>
-          <ResponsiveContainer width="100%" height={160}>
+          <ResponsiveContainer width="100%" height={210}>
             <BarChart data={espAlertData} layout="vertical">
-              <XAxis type="number" tick={{ fontSize: 10 }} unit="%" domain={[0, 100]} />
+              <XAxis type="number" tick={{ fontSize: 10 }} allowDecimals={false} />
               <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} width={95} />
               <Tooltip
-                formatter={(val, _name, props) => [
-                  `${val}% (${props.payload.alert}/${props.payload.total})`,
-                  'Alerta >6h',
-                ]}
+                formatter={(val, name) => [val, name]}
+                labelFormatter={(label) => `Especialidad: ${label}`}
               />
-              <Bar dataKey="pct" radius={[0, 4, 4, 0]}>
-                {espAlertData.map((entry, i) => (
-                  <Cell key={i} fill={entry.pct > 30 ? '#EF4444' : '#39A8AD'} />
-                ))}
-              </Bar>
+              <Legend iconType="square" iconSize={10} wrapperStyle={{ fontSize: 11 }} />
+              {ESI_LEVELS.map((esi) => (
+                <Bar key={esi} dataKey={esi} stackId="a" fill={ESI_CHART_COLORS[esi]} />
+              ))}
             </BarChart>
           </ResponsiveContainer>
         </div>

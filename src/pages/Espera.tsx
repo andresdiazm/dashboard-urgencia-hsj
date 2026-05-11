@@ -13,6 +13,7 @@ const ESI_THRESHOLDS: Partial<Record<ESILevel, number>> = {
   'ESI-2': 30,
   'ESI-3': 90,
   'ESI-4': 180,
+  'ESI-5': 180,
 }
 
 const ESI_TARGETS: Partial<Record<ESILevel, number>> = {
@@ -120,11 +121,6 @@ export default function Espera() {
     return esiList.map((esi) => {
       const group = enriched.filter((p) => p.esi === esi)
       const threshold = ESI_THRESHOLDS[esi]
-      if (esi === 'ESI-5') {
-        const over180 = group.filter((p) => (p.tiempoEspera ?? 0) > 180).length
-        const pctOver = pct(over180, group.length)
-        return { esi, total: group.length, metric: pctOver, label: '% con espera >180min', isAlert: true }
-      }
       if (!threshold) return { esi, total: group.length, metric: 0, label: '', isAlert: false }
       const onTime = group.filter((p) => (p.tiempoEspera ?? Infinity) <= threshold).length
       const metric = pct(onTime, group.length)
@@ -216,12 +212,10 @@ export default function Espera() {
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
         <p className="text-sm font-semibold text-hsj-navy mb-4">Cumplimiento de tiempos por ESI</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {compliance.map(({ esi, total, metric, label, isAlert }) => {
+          {compliance.map(({ esi, total, metric, label }) => {
             const target = ESI_TARGETS[esi as ESILevel]
-            const colorClass = isAlert
-              ? metric > 20
-                ? 'text-red-600 bg-red-50 border-red-200'
-                : 'text-green-600 bg-green-50 border-green-200'
+            const colorClass = total === 0
+              ? 'text-gray-400 bg-gray-50 border-gray-200'
               : target
               ? semaphoreColor(metric, target)
               : 'text-gray-500 bg-gray-50 border-gray-200'
@@ -232,9 +226,13 @@ export default function Espera() {
                   <span className="font-bold text-sm">{esi}</span>
                   <span className="text-xs opacity-70">n={total}</span>
                 </div>
-                <p className="text-2xl font-bold">{metric}%</p>
+                {total === 0 ? (
+                  <p className="text-sm font-semibold mt-1">sin casos</p>
+                ) : (
+                  <p className="text-2xl font-bold">{metric}%</p>
+                )}
                 <p className="text-xs opacity-70 mt-1">{label}</p>
-                {target && !isAlert && (
+                {target && total > 0 && (
                   <p className="text-xs opacity-60">Meta: {target}%</p>
                 )}
               </div>
