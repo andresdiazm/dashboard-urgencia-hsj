@@ -1,4 +1,4 @@
-import { FileText, Clock, Stethoscope, AlertTriangle, Database, Shield, BarChart2 } from 'lucide-react'
+import { Clock, Stethoscope, AlertTriangle, Database, Shield, BarChart2 } from 'lucide-react'
 
 function Section({ icon: Icon, title, children }: { icon: React.ElementType; title: string; children: React.ReactNode }) {
   return (

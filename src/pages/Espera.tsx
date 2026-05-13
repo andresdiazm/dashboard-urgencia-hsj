@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Legend,
 } from 'recharts'
 import { AlertTriangle, Download } from 'lucide-react'
 import { useDataStore } from '../store/useDataStore'
@@ -29,6 +29,16 @@ const ESI_BADGE_COLORS: Record<ESILevel, string> = {
   'ESI-4': 'bg-green-500 text-white',
   'ESI-5': 'bg-blue-400 text-white',
 }
+
+const ESI_CHART_COLORS: Record<ESILevel, string> = {
+  'ESI-1': '#B91C1C',
+  'ESI-2': '#F97316',
+  'ESI-3': '#FACC15',
+  'ESI-4': '#22C55E',
+  'ESI-5': '#60A5FA',
+}
+
+const ESI_LEVELS: ESILevel[] = ['ESI-1', 'ESI-2', 'ESI-3', 'ESI-4', 'ESI-5']
 
 function pct(num: number, den: number) {
   if (den === 0) return 0
@@ -100,20 +110,41 @@ export default function Espera() {
     return { medEspera, pctCat10, total: enriched.length }
   }, [enriched])
 
-  const esiGroups = useMemo(() => {
-    const groups: Record<string, number> = {}
+  const espEsiData = useMemo(() => {
+    const groups: Record<string, Partial<Record<ESILevel, number>> & { total: number }> = {}
     enriched.forEach((p) => {
-      groups[p.esi] = (groups[p.esi] ?? 0) + 1
+      if (!groups[p.especialidad]) groups[p.especialidad] = { total: 0 }
+      groups[p.especialidad].total = (groups[p.especialidad].total ?? 0) + 1
+      groups[p.especialidad][p.esi] = (groups[p.especialidad][p.esi] ?? 0) + 1
     })
-    return Object.entries(groups).sort(([a], [b]) => a.localeCompare(b))
+    return Object.entries(groups)
+      .sort(([, a], [, b]) => b.total - a.total)
+      .slice(0, 8)
+      .map(([name, counts]) => ({
+        name: name.slice(0, 14),
+        'ESI-1': counts['ESI-1'] ?? 0,
+        'ESI-2': counts['ESI-2'] ?? 0,
+        'ESI-3': counts['ESI-3'] ?? 0,
+        'ESI-4': counts['ESI-4'] ?? 0,
+        'ESI-5': counts['ESI-5'] ?? 0,
+      }))
   }, [enriched])
 
-  const espGroups = useMemo(() => {
-    const groups: Record<string, number> = {}
+  const espMedianaData = useMemo(() => {
+    const groups: Record<string, number[]> = {}
     enriched.forEach((p) => {
-      groups[p.especialidad] = (groups[p.especialidad] ?? 0) + 1
+      if (p.tiempoEspera !== null) {
+        if (!groups[p.especialidad]) groups[p.especialidad] = []
+        groups[p.especialidad].push(p.tiempoEspera)
+      }
     })
-    return Object.entries(groups).sort(([, a], [, b]) => b - a).slice(0, 8)
+    return Object.entries(groups)
+      .sort(([, a], [, b]) => b.length - a.length)
+      .slice(0, 8)
+      .map(([name, values]) => ({
+        name: name.slice(0, 10),
+        mediana: median(values),
+      }))
   }, [enriched])
 
   const compliance = useMemo(() => {
@@ -178,36 +209,6 @@ export default function Espera() {
         </div>
       </div>
 
-      {/* ESI + Especialidad breakdown */}
-      <div className="grid md:grid-cols-2 gap-4">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Por ESI</p>
-          <div className="flex flex-wrap gap-2">
-            {esiGroups.map(([esi, cnt]) => (
-              <span key={esi} className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold ${badgeColor(esi as ESILevel)}`}>
-                {esi}: {cnt}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Por Especialidad</p>
-          <ResponsiveContainer width="100%" height={140}>
-            <BarChart data={espGroups.map(([name, value]) => ({ name: name.slice(0, 12), value }))} layout="vertical">
-              <XAxis type="number" tick={{ fontSize: 10 }} />
-              <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} width={90} />
-              <Tooltip />
-              <Bar dataKey="value" radius={[0, 4, 4, 0]}>
-                {espGroups.map((_, i) => (
-                  <Cell key={i} fill="#39A8AD" />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
       {/* Semáforo ESI */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
         <p className="text-sm font-semibold text-hsj-navy mb-4">Cumplimiento de tiempos por ESI</p>
@@ -238,6 +239,40 @@ export default function Espera() {
               </div>
             )
           })}
+        </div>
+      </div>
+
+      {/* Gráficos: Casos por especialidad + Mediana de espera */}
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Casos por Especialidad y ESI</p>
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={espEsiData} layout="vertical">
+              <XAxis type="number" tick={{ fontSize: 10 }} allowDecimals={false} />
+              <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} width={95} />
+              <Tooltip labelFormatter={(label) => `Especialidad: ${label}`} />
+              <Legend iconType="square" iconSize={10} wrapperStyle={{ fontSize: 11 }} />
+              {ESI_LEVELS.map((esi) => (
+                <Bar key={esi} dataKey={esi} stackId="a" fill={ESI_CHART_COLORS[esi]} />
+              ))}
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Mediana de Espera por Especialidad (min)</p>
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={espMedianaData}>
+              <XAxis dataKey="name" tick={{ fontSize: 10 }} angle={-45} textAnchor="end" height={60} />
+              <YAxis tick={{ fontSize: 10 }} />
+              <Tooltip formatter={(v) => [`${v} min`, 'Mediana']} />
+              <Bar dataKey="mediana" fill="#39A8AD" radius={[4, 4, 0, 0]}>
+                {espMedianaData.map((_, i) => (
+                  <Cell key={i} fill="#39A8AD" />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
 

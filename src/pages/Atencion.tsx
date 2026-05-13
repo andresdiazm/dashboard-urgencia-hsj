@@ -172,8 +172,8 @@ export default function Atencion() {
         </div>
       </div>
 
-      {/* ESI + Especialidad */}
-      <div className="grid md:grid-cols-2 gap-4">
+      {/* ESI + Alertas por Especialidad + Pacientes por Especialidad */}
+      <div className="grid md:grid-cols-3 gap-4">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Por ESI</p>
           <ResponsiveContainer width="100%" height={130}>
@@ -206,6 +206,23 @@ export default function Atencion() {
               {ESI_LEVELS.map((esi) => (
                 <Bar key={esi} dataKey={esi} stackId="a" fill={ESI_CHART_COLORS[esi]} />
               ))}
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+            Pacientes por Especialidad
+          </p>
+          <ResponsiveContainer width="100%" height={210}>
+            <BarChart
+              data={espGroups.map(([name, { total }]) => ({ name: name.slice(0, 12), total }))}
+              layout="vertical"
+            >
+              <XAxis type="number" tick={{ fontSize: 10 }} allowDecimals={false} />
+              <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} width={90} />
+              <Tooltip formatter={(v) => [v, 'Pacientes']} />
+              <Bar dataKey="total" fill="#39A8AD" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
