@@ -44,17 +44,17 @@ export default function Carga() {
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-hsj-navy">Carga de Datos</h1>
+        <h1 className="text-xl font-bold text-hsj-bay">Carga de Datos</h1>
         <p className="text-sm text-gray-500 mt-1">
           Sube el archivo Excel exportado del sistema de gestión de urgencias.
         </p>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <label className="flex flex-col items-center justify-center gap-3 border-2 border-dashed border-hsj-teal/40 rounded-xl p-10 cursor-pointer hover:border-hsj-teal hover:bg-hsj-bg transition-colors">
-          <FileSpreadsheet className="w-10 h-10 text-hsj-teal" />
+        <label className="flex flex-col items-center justify-center gap-3 border-2 border-dashed border-hsj-pal/40 rounded-xl p-10 cursor-pointer hover:border-hsj-pal hover:bg-hsj-sunken transition-colors">
+          <FileSpreadsheet className="w-10 h-10 text-hsj-pal" />
           <span className="text-sm font-medium text-gray-600">
-            Haz clic o arrastra aquí tu archivo <span className="text-hsj-teal">.xlsx / .xls</span>
+            Haz clic o arrastra aquí tu archivo <span className="text-hsj-pal">.xlsx / .xls</span>
           </span>
           <span className="text-xs text-gray-400">Solo archivos Excel del sistema de urgencias</span>
           <input
@@ -72,7 +72,7 @@ export default function Carga() {
         )}
 
         {loading && (
-          <p className="mt-3 text-sm text-hsj-teal text-center animate-pulse">
+          <p className="mt-3 text-sm text-hsj-pal text-center animate-pulse">
             Procesando archivo...
           </p>
         )}
@@ -82,7 +82,7 @@ export default function Carga() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="px-5 py-4 border-b border-gray-100 flex flex-wrap items-center justify-between gap-3">
             <div>
-              <span className="font-semibold text-hsj-navy">{patients.length} registros cargados</span>
+              <span className="font-semibold text-hsj-bay">{patients.length} registros cargados</span>
               {loadTimestamp && (
                 <span className="ml-3 text-xs text-gray-400">
                   {loadTimestamp.toLocaleString('es-CL')}

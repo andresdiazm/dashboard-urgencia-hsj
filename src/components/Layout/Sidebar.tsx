@@ -32,7 +32,7 @@ export default function Sidebar({ open, onClose }: Props) {
         className={`
           fixed md:static top-0 left-0 h-full z-30
           flex flex-col
-          w-64 bg-hsj-navy text-white
+          w-64 bg-hsj-bay text-white
           transition-transform duration-200
           ${open ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
         `}
@@ -53,7 +53,7 @@ export default function Sidebar({ open, onClose }: Props) {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-4 py-3 text-sm transition-colors ${
                   isActive
-                    ? 'bg-hsj-teal text-white font-semibold'
+                    ? 'bg-hsj-pal text-white font-semibold'
                     : 'text-white/70 hover:bg-white/10 hover:text-white'
                 }`
               }

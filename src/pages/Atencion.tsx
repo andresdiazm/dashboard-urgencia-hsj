@@ -148,7 +148,7 @@ export default function Atencion() {
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-hsj-navy">Pacientes en Atención</h1>
+        <h1 className="text-xl font-bold text-hsj-bay">Pacientes en Atención</h1>
         <p className="text-sm text-gray-500 mt-1">
           Pacientes con atención iniciada ({kpis.total} casos)
         </p>
@@ -158,7 +158,7 @@ export default function Atencion() {
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total en atención</p>
-          <p className="text-3xl font-bold text-hsj-teal-dark mt-1">{kpis.total}</p>
+          <p className="text-3xl font-bold text-hsj-bay mt-1">{kpis.total}</p>
         </div>
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Alerta &gt;6 hrs</p>
@@ -183,7 +183,7 @@ export default function Atencion() {
               <Tooltip formatter={(val) => [val, 'Pacientes']} />
               <Bar dataKey="value" radius={[0, 4, 4, 0]}>
                 {esiGroups.map(([esi], i) => (
-                  <Cell key={i} fill={ESI_CHART_COLORS[esi as ESILevel] ?? '#39A8AD'} />
+                  <Cell key={i} fill={ESI_CHART_COLORS[esi as ESILevel] ?? '#4A7FC1'} />
                 ))}
               </Bar>
             </BarChart>
@@ -222,7 +222,7 @@ export default function Atencion() {
               <XAxis type="number" tick={{ fontSize: 10 }} allowDecimals={false} />
               <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} width={90} />
               <Tooltip formatter={(v) => [v, 'Pacientes']} />
-              <Bar dataKey="total" fill="#39A8AD" radius={[0, 4, 4, 0]} />
+              <Bar dataKey="total" fill="#26A69A" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -231,7 +231,7 @@ export default function Atencion() {
       {/* Table */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="px-5 py-4 border-b border-gray-100 flex flex-wrap items-center gap-3">
-          <span className="font-semibold text-hsj-navy text-sm">Casos en atención</span>
+          <span className="font-semibold text-hsj-bay text-sm">Casos en atención</span>
           <div className="flex flex-wrap gap-2 flex-1">
             <select
               value={filterESI}
@@ -264,7 +264,7 @@ export default function Atencion() {
           </div>
           <button
             onClick={handleExport}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-hsj-teal-dark border border-hsj-teal/30 rounded-lg hover:bg-hsj-bg transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-hsj-bay border border-hsj-pal/30 rounded-lg hover:bg-hsj-sunken transition-colors"
           >
             <Download className="w-4 h-4" />
             CSV

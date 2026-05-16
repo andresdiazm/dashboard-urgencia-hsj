@@ -180,7 +180,7 @@ export default function Espera() {
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-hsj-navy">Sala de Espera</h1>
+        <h1 className="text-xl font-bold text-hsj-bay">Sala de Espera</h1>
         <p className="text-sm text-gray-500 mt-1">
           Pacientes que aún no han iniciado atención ({kpis.total} casos)
         </p>
@@ -190,16 +190,16 @@ export default function Espera() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total en espera</p>
-          <p className="text-3xl font-bold text-hsj-teal-dark mt-1">{kpis.total}</p>
+          <p className="text-3xl font-bold text-hsj-bay mt-1">{kpis.total}</p>
         </div>
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Mediana espera</p>
-          <p className="text-3xl font-bold text-hsj-teal-dark mt-1">{kpis.medEspera}</p>
+          <p className="text-3xl font-bold text-hsj-bay mt-1">{kpis.medEspera}</p>
           <p className="text-xs text-gray-400">minutos</p>
         </div>
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Cat. &lt;10 min</p>
-          <p className="text-3xl font-bold text-hsj-teal-dark mt-1">{kpis.pctCat10}%</p>
+          <p className="text-3xl font-bold text-hsj-bay mt-1">{kpis.pctCat10}%</p>
         </div>
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Con alerta</p>
@@ -211,7 +211,7 @@ export default function Espera() {
 
       {/* Semáforo ESI */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-        <p className="text-sm font-semibold text-hsj-navy mb-4">Cumplimiento de tiempos por ESI</p>
+        <p className="text-sm font-semibold text-hsj-bay mb-4">Cumplimiento de tiempos por ESI</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {compliance.map(({ esi, total, metric, label }) => {
             const target = ESI_TARGETS[esi as ESILevel]
@@ -266,9 +266,9 @@ export default function Espera() {
               <XAxis dataKey="name" tick={{ fontSize: 10 }} angle={-45} textAnchor="end" height={60} />
               <YAxis tick={{ fontSize: 10 }} />
               <Tooltip formatter={(v) => [`${v} min`, 'Mediana']} />
-              <Bar dataKey="mediana" fill="#39A8AD" radius={[4, 4, 0, 0]}>
+              <Bar dataKey="mediana" fill="#4A7FC1" radius={[4, 4, 0, 0]}>
                 {espMedianaData.map((_, i) => (
-                  <Cell key={i} fill="#39A8AD" />
+                  <Cell key={i} fill="#4A7FC1" />
                 ))}
               </Bar>
             </BarChart>
@@ -279,7 +279,7 @@ export default function Espera() {
       {/* Filters + Table */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="px-5 py-4 border-b border-gray-100 flex flex-wrap items-center gap-3">
-          <span className="font-semibold text-hsj-navy text-sm">Casos en espera</span>
+          <span className="font-semibold text-hsj-bay text-sm">Casos en espera</span>
           <div className="flex flex-wrap gap-2 flex-1">
             <select
               value={filterESI}
@@ -312,7 +312,7 @@ export default function Espera() {
           </div>
           <button
             onClick={handleExport}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-hsj-teal-dark border border-hsj-teal/30 rounded-lg hover:bg-hsj-bg transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-hsj-bay border border-hsj-pal/30 rounded-lg hover:bg-hsj-sunken transition-colors"
           >
             <Download className="w-4 h-4" />
             CSV

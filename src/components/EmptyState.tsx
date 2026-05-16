@@ -10,8 +10,8 @@ export default function EmptyState({ message }: Props) {
 
   return (
     <div className="flex flex-col items-center justify-center h-64 gap-4 text-center">
-      <div className="bg-hsj-bg rounded-full p-6">
-        <Upload className="w-10 h-10 text-hsj-teal" />
+      <div className="bg-hsj-sunken rounded-full p-6">
+        <Upload className="w-10 h-10 text-hsj-pal" />
       </div>
       <div>
         <p className="text-lg font-semibold text-gray-600">
@@ -23,7 +23,7 @@ export default function EmptyState({ message }: Props) {
       </div>
       <button
         onClick={() => navigate('/carga')}
-        className="mt-2 px-4 py-2 bg-hsj-teal text-white rounded-lg text-sm font-medium hover:bg-hsj-teal-dark transition-colors"
+        className="mt-2 px-4 py-2 bg-hsj-pal text-white rounded-lg text-sm font-medium hover:bg-hsj-bay transition-colors"
       >
         Ir a Carga de Datos
       </button>

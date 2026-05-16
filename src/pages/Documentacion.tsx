@@ -4,8 +4,8 @@ function Section({ icon: Icon, title, children }: { icon: React.ElementType; tit
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
       <div className="flex items-center gap-2 mb-4">
-        <Icon className="w-5 h-5 text-hsj-teal-dark" />
-        <h2 className="text-base font-bold text-hsj-navy">{title}</h2>
+        <Icon className="w-5 h-5 text-hsj-pal" />
+        <h2 className="text-base font-bold text-hsj-bay">{title}</h2>
       </div>
       {children}
     </div>
@@ -47,7 +47,7 @@ export default function Documentacion() {
   return (
     <div className="p-6 space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-xl font-bold text-hsj-navy">Documentación Técnica</h1>
+        <h1 className="text-xl font-bold text-hsj-bay">Documentación Técnica</h1>
         <p className="text-sm text-gray-500 mt-1">
           Indicadores calculados y reglas operacionales del Dashboard de Urgencia
         </p>
@@ -84,7 +84,7 @@ export default function Documentacion() {
       <Section icon={Shield} title="Reglas de Clasificación">
         <div className="space-y-4 text-sm text-gray-700">
           <div>
-            <p className="font-semibold text-hsj-navy mb-1">Estado del paciente</p>
+            <p className="font-semibold text-hsj-bay mb-1">Estado del paciente</p>
             <div className="grid md:grid-cols-2 gap-3">
               <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
                 <p className="font-semibold text-amber-700">En Espera</p>
@@ -100,13 +100,13 @@ export default function Documentacion() {
           </div>
 
           <div>
-            <p className="font-semibold text-hsj-navy mb-1">Anonimización del RUN</p>
+            <p className="font-semibold text-hsj-bay mb-1">Anonimización del RUN</p>
             <p>El RUN se enmascara al momento de la carga: solo se muestran los últimos 4 dígitos numéricos
             (<code className="bg-gray-100 px-1 rounded">****XXXX</code>). El RUN original nunca se almacena en el navegador.</p>
           </div>
 
           <div>
-            <p className="font-semibold text-hsj-navy mb-1">Referencia temporal</p>
+            <p className="font-semibold text-hsj-bay mb-1">Referencia temporal</p>
             <p>El instante de referencia para todos los cálculos de tiempo transcurrido es la <strong>fecha y hora de carga del archivo</strong>.
             Esto permite obtener tiempos actualizados al momento del análisis sin requerir una conexión al sistema clínico.</p>
           </div>
@@ -193,7 +193,7 @@ export default function Documentacion() {
       <Section icon={Clock} title="Sección: Sala de Espera">
         <div className="space-y-5 text-sm">
           <div>
-            <p className="font-semibold text-hsj-navy mb-2">Indicadores KPI</p>
+            <p className="font-semibold text-hsj-bay mb-2">Indicadores KPI</p>
             <Table
               headers={['Indicador', 'Definición']}
               rows={[
@@ -206,7 +206,7 @@ export default function Documentacion() {
           </div>
 
           <div>
-            <p className="font-semibold text-hsj-navy mb-2">Cumplimiento de tiempos por ESI</p>
+            <p className="font-semibold text-hsj-bay mb-2">Cumplimiento de tiempos por ESI</p>
             <p className="text-gray-600 mb-2">
               Para ESI-2, ESI-3, ESI-4 y ESI-5 se calcula el porcentaje de pacientes en espera
               cuyo tiempo de espera es menor al umbral del nivel. El semáforo se interpreta así:
@@ -236,7 +236,7 @@ export default function Documentacion() {
       <Section icon={Stethoscope} title="Sección: En Atención">
         <div className="space-y-5 text-sm">
           <div>
-            <p className="font-semibold text-hsj-navy mb-2">Indicadores KPI</p>
+            <p className="font-semibold text-hsj-bay mb-2">Indicadores KPI</p>
             <Table
               headers={['Indicador', 'Definición']}
               rows={[
@@ -248,7 +248,7 @@ export default function Documentacion() {
           </div>
 
           <div>
-            <p className="font-semibold text-hsj-navy mb-2">Gráfico: Alertas por Especialidad</p>
+            <p className="font-semibold text-hsj-bay mb-2">Gráfico: Alertas por Especialidad</p>
             <p className="text-gray-600">
               Muestra el número de pacientes con alerta (&gt;6h) para cada especialidad, desglosado en
               barras apiladas por nivel ESI. Permite identificar qué especialidades concentran mayor
